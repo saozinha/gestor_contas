@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+
+  api-database:
+    image: mongo:4.2.2
+    container_name: "api-database"
+    hostname: "api-database"
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data/db:/data/gercontas
+    networks:
+      - gateway
+
+## Networks container
+networks:
+  gateway:
+    driver: "bridge"
+
+### Volumes
+volumes:
+  data:

@@ -1,4 +1,4 @@
-package com.lourenco.gestor_contas.input;
+package com.lourenco.gestor_contas.inputOutPut;
 
 import com.lourenco.gestor_contas.tools.Cpf;
 import io.swagger.annotations.ApiModel;

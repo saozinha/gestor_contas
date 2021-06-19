@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "persons")
+@Document(collection = "person")
 public class Person {
 
     @Id

@@ -1,8 +1,8 @@
-package com.lourenco.gestor_contas.module.mapper;
+package com.lourenco.gestor_contas.module.person.mapper;
 
 import com.lourenco.gestor_contas.dal.Person;
-import com.lourenco.gestor_contas.inputOutPut.PersonInput;
-import com.lourenco.gestor_contas.inputOutPut.PersonOutput;
+import com.lourenco.gestor_contas.inputOutPut.person.PersonInput;
+import com.lourenco.gestor_contas.inputOutPut.person.PersonOutput;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,7 @@ public class PersonMapper {
         final var personOutput = new PersonOutput();
         personOutput.setId(person.getId());
         personOutput.setName(person.getName());
+        personOutput.setCpf(person.getCpf());
         return personOutput;
     }
 

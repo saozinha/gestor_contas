@@ -1,4 +1,4 @@
-package com.lourenco.gestor_contas.inputOutPut;
+package com.lourenco.gestor_contas.inputOutPut.person;
 
 import lombok.Data;
 

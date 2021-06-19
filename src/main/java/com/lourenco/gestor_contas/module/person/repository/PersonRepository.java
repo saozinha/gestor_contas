@@ -1,4 +1,4 @@
-package com.lourenco.gestor_contas.module;
+package com.lourenco.gestor_contas.module.person.repository;
 
 import com.lourenco.gestor_contas.dal.Person;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface PersonRepository extends MongoRepository<Person, String> {
 
-    Optional<Person>  findByCpf(String cpf);
+    Optional<Person> findByCpf(String cpf);
 }

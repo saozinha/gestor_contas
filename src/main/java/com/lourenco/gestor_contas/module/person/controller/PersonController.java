@@ -1,0 +1,55 @@
+package com.lourenco.gestor_contas.module.person.controller;
+
+
+import com.lourenco.gestor_contas.inputOutPut.person.PersonInput;
+import com.lourenco.gestor_contas.inputOutPut.person.PersonOutput;
+import com.lourenco.gestor_contas.module.person.mapper.PersonMapper;
+import com.lourenco.gestor_contas.module.person.service.PersonService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
+
+import javax.validation.Valid;
+
+@RestController
+@RequestMapping("/person")
+@Api(value = "Person API", consumes = "application/json charset=utf-8")
+public class PersonController {
+
+    @Autowired
+    private PersonService personService;
+
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
+
+    @PostMapping("/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Utilize para registrar uma pessoa", consumes = "application/json")
+    public PersonOutput create(
+            @ApiParam(value = "Objeto necessario para registrar uma pessoa", required = true)
+            @Valid @RequestBody final PersonInput personInput) throws Exception {
+        return this.personService.create(personInput);
+    }
+
+
+    @GetMapping("/get/{cpf}")
+    @ApiOperation(value = "Utilize para buscar uma pessoa", consumes = "application/json")
+    public PersonOutput get(@ApiParam(value = "CPF da pessoa", required = true)
+                                @PathVariable("cpf") String cpf ) {
+        return PersonMapper.toPersonOutput(this.personService.findByCpf(cpf).get());
+    }
+
+    @GetMapping("/list")
+    @ApiOperation(value = "Utilize para visualizar todas as pessoas", consumes = "application/json")
+    public Flux<PersonOutput> list(){
+        return Flux.fromStream(this.personService.getAll().stream())
+                .subscribeOn(Schedulers.boundedElastic())
+                .map(PersonMapper::toPersonOutput);
+    }
+}

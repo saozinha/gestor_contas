@@ -1,4 +1,4 @@
-package com.lourenco.gestor_contas.tools;
+package com.lourenco.gestor_contas.tools.validators;
 
 
 import javax.validation.Constraint;

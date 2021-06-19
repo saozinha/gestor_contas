@@ -1,6 +1,6 @@
-package com.lourenco.gestor_contas.inputOutPut;
+package com.lourenco.gestor_contas.inputOutPut.person;
 
-import com.lourenco.gestor_contas.tools.Cpf;
+import com.lourenco.gestor_contas.tools.validators.Cpf;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

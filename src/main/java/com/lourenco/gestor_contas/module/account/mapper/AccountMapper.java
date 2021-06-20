@@ -1,4 +1,4 @@
-package com.lourenco.gestor_contas.module.account;
+package com.lourenco.gestor_contas.module.account.mapper;
 
 import com.lourenco.gestor_contas.dal.Account;
 import com.lourenco.gestor_contas.dal.Person;
@@ -9,21 +9,24 @@ public class AccountMapper {
 
     public static AccountOutput toAccountOutput(Account account) {
         final var accountOutput = new AccountOutput();
+        accountOutput.setId(account.getId());
         accountOutput.setNumberAccount(account.getNumberAccount());
         accountOutput.setAgency(account.getAgency());
-        accountOutput.setBalance(account.getBalance());
         accountOutput.setCpf(account.getPerson().getCpf());
         accountOutput.setTypeAccount(account.getTypeAccount());
+        accountOutput.setBalance(account.getBalance());
+        accountOutput.setCreatedAt(account.getCreatedAt());
+        accountOutput.setUpdatedAt(account.getUpdatedAt());
         return accountOutput;
     }
 
     public static Account to(AccountInput accountInput, Person person) {
         final var account = new Account();
-        account.setNumberAccount(accountInput.getNumberAccount());
         account.setAgency(accountInput.getAgency());
-        account.setBalance(accountInput.getBalance());
-        account.setPerson(person);
+        account.setNumberAccount(accountInput.getNumberAccount());
         account.setTypeAccount(accountInput.getTypeAccount());
+        account.setPerson(person);
+        account.setBalance(accountInput.getBalance());
         return account;
     }
 }

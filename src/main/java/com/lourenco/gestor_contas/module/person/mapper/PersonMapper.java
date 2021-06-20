@@ -12,6 +12,7 @@ public class PersonMapper {
     public static Person to(PersonInput personInput) {
         final var person = new Person();
         person.setName(personInput.getName());
+        person.setLastName(personInput.getLastName());
         person.setCpf(personInput.getCpf());
         return person;
     }
@@ -21,6 +22,9 @@ public class PersonMapper {
         personOutput.setId(person.getId());
         personOutput.setName(person.getName());
         personOutput.setCpf(person.getCpf());
+        personOutput.setLastName(person.getLastName());
+        personOutput.setCreatedAt(person.getCreatedAt());
+        personOutput.setUpdatedAt(person.getUpdatedAt());
         return personOutput;
     }
 

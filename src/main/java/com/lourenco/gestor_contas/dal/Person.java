@@ -11,13 +11,16 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "person")
-public class Person {
+public class Person  extends BaseEntity  {
 
     @Id
     private String id;
 
     @Field(name = "name")
     private String name;
+
+    @Field(name = "lastName")
+    private String lastName;
 
     @Field(name = "cpf")
     private String cpf;

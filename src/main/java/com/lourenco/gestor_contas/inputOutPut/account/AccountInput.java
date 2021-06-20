@@ -1,30 +1,38 @@
 package com.lourenco.gestor_contas.inputOutPut.account;
 
-import com.lourenco.gestor_contas.dal.Person;
+import com.lourenco.gestor_contas.enums.TypeAccount;
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Field;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import java.io.Serializable;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @ApiModel(value = "Account", description = "Dados necessários para cadastrar uma conta")
-public class AccountInput {
+public class AccountInput implements Serializable {
 
-    @Field(name = "agency")
+    private static final long serialVersionUID = 5304275972722540032L;
+
+    @ApiModelProperty(notes = "numero da agencia", required = true)
+    @NotNull(message = "A agencia não pode ser nula.")
     private String agency;
 
-    @Field(name = "numberAccount")
+    @ApiModelProperty(notes = "numero da conta com digito", required = true)
+    @NotNull(message = "O numero da conta  não pode ser nulo.")
     private String numberAccount;
 
-    @Field(name = "cpf")
+    @ApiModelProperty(notes = "numero de cpf do titular", required = true)
+    @NotNull(message = "O numero de cpf do titular pode ser nulo.")
     private String cpf;
 
-    @Field(name = "balance")
-    private Double balance;
+    @ApiModelProperty(notes = "Tipo da conta", required = true)
+    @NotNull(message = "O Tipo não pode ser nulo.")
+    private TypeAccount typeAccount;
 
-    @Field(name = "typeAccount")
-    private String typeAccount;
+    @ApiModelProperty(notes = "Saldo da conta", required = true)
+    @NotNull(message = "O Saldo não pode ser nulo.")
+    @Positive(message = "O Saldo não pode ser negativo.")
+    private Double balance;
 }

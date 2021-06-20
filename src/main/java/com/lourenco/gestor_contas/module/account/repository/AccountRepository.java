@@ -1,4 +1,4 @@
-package com.lourenco.gestor_contas.module.account;
+package com.lourenco.gestor_contas.module.account.repository;
 
 import com.lourenco.gestor_contas.dal.Account;
 import com.lourenco.gestor_contas.dal.Person;
@@ -12,4 +12,5 @@ public interface AccountRepository extends MongoRepository<Account, String> {
 
     Optional<Account> findByPerson(Person person);
 
+    Optional<Account> findByNumberAccount(String numberAccount);
 }

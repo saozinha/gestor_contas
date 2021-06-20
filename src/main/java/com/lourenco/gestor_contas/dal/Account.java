@@ -1,5 +1,6 @@
 package com.lourenco.gestor_contas.dal;
 
+import com.lourenco.gestor_contas.enums.TypeAccount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,18 +9,22 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "conta")
-public class Account {
+public class Account extends BaseEntity {
 
     @Id
     private String id;
 
     @Field(name = "typeAccount")
-    private String typeAccount;
+    @Enumerated(EnumType.STRING)
+    private TypeAccount typeAccount;
 
     @Field(name = "agency")
     private String agency;

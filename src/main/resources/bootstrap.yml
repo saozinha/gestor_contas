@@ -1,0 +1,12 @@
+server:
+  error:
+    include-stacktrace: never
+
+spring:
+  application:
+    name: gestor_contas
+  data:
+    mongodb:
+      uri: mongodb://mongodb/gercontas
+      driverClassName: MongoDB
+      port: 27017

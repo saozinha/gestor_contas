@@ -14,17 +14,26 @@ import javax.persistence.Id;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "person")
+@Document(collection = "statement")
 public class Statement  extends BaseEntity  {
 
     @Id
     private String id;
 
-    @Field(name = "account")
-    private Account account;
+    @Field("agency")
+    private String agency;
 
-    @Field(name = "person")
-    private Person person ;
+    @Field("numberAccount")
+    private String numberAccount;
+
+    @Field("balanceCurrent")
+    private Double balanceCurrent;
+
+    @Field("cpf")
+    private String cpf;
+
+    @Field("name")
+    private String name;
 
     @Field("actionAccount")
     private ActionAccount actionAccount;

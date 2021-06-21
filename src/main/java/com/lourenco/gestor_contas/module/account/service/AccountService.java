@@ -3,7 +3,10 @@ package com.lourenco.gestor_contas.module.account.service;
 import com.lourenco.gestor_contas.dal.Account;
 import com.lourenco.gestor_contas.dal.Statement;
 import com.lourenco.gestor_contas.inputOutPut.BalanceInput;
+import com.lourenco.gestor_contas.inputOutPut.TransFerInput;
 import com.lourenco.gestor_contas.inputOutPut.account.AccountInput;
+
+import java.util.List;
 
 public interface AccountService {
 
@@ -13,9 +16,11 @@ public interface AccountService {
 
     Account findById(String idAccount);
 
-    Account deposit(BalanceInput balanceInput);
+    Statement deposit(BalanceInput balanceInput);
 
     Account findByNumberAccount(String numberAccount);
 
-    Statement findStatementByCpf(String cpf);
+    List<Statement> findStatementByCpf(String cpf);
+
+    Statement transferToAnotherAccount(TransFerInput transferInput);
 }

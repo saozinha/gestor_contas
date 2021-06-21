@@ -5,16 +5,20 @@ import com.lourenco.gestor_contas.dal.Statement;
 import com.lourenco.gestor_contas.enums.ActionAccount;
 import com.lourenco.gestor_contas.inputOutPut.BalanceInput;
 import com.lourenco.gestor_contas.inputOutPut.account.AccountInput;
+import com.lourenco.gestor_contas.inputOutPut.TransFerInput;
 import com.lourenco.gestor_contas.module.account.mapper.AccountMapper;
 import com.lourenco.gestor_contas.module.account.repository.AccountRepository;
 import com.lourenco.gestor_contas.module.person.service.PersonService;
 import com.lourenco.gestor_contas.module.statement.service.StatementService;
+import com.lourenco.gestor_contas.tools.exceptions.BadRequestException;
 import com.lourenco.gestor_contas.tools.exceptions.ConflictException;
 import com.lourenco.gestor_contas.tools.exceptions.NotBalanceAcceptableException;
 import com.lourenco.gestor_contas.tools.exceptions.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -51,15 +55,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account deposit(BalanceInput balanceInput) {
+    public Statement deposit(BalanceInput balanceInput) {
         final var account = this.findAccountByCpf(balanceInput.getCpf());
         final var statement = new Statement();
         statement.setActionAccount(ActionAccount.DEPOSIT);
         validateBalance(ActionAccount.DEPOSIT , balanceInput.getBalance());
         Double newBalance = account.getBalance() + balanceInput.getBalance();
         account.setBalance(newBalance);
-        this.statementService.setStatementAccount(ActionAccount.DEPOSIT, account, newBalance);
-        return  this.repository.save(account);
+        this.repository.save(account);
+        return this.statementService.setStatementAccount(ActionAccount.DEPOSIT, account, balanceInput.getBalance());
     }
 
     @Override
@@ -68,9 +72,36 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Statement findStatementByCpf(String cpf) {
+    public List<Statement> findStatementByCpf(String cpf) {
         final var account = this.findAccountByCpf(cpf);
-        return this.statementService.findByAccount(account);
+        return this.statementService.findByNumberAccount(account);
+    }
+
+    @Override
+    public Statement transferToAnotherAccount(TransFerInput transferInput) {
+        // buscar as conta do titular
+        final var accountTitular = this.findByNumberAccount(transferInput.getNumberAccount());
+        // validar o saldo do titular
+        this.validateIfCanTransfer(accountTitular.getBalance() , transferInput.getBalance() );
+        // subtrair o valor da conta do titular
+        Double balanceTitular = accountTitular.getBalance()  - transferInput.getBalance();
+        accountTitular.setBalance(balanceTitular);
+        // registrar o extrato da conta do titular
+        final var statementTitular = this.statementService.setStatementAccount(ActionAccount.TRANSFER, accountTitular, transferInput.getBalance());
+        this.sendTransferToAccount(transferInput.getCpfPersonReceiver(), transferInput.getBalance());
+        return statementTitular;
+    }
+
+    private void sendTransferToAccount(String cpf, Double balanceTransfer) {
+        // buscar as conta do favorecido
+        final var accountReceiver = this.findAccountByCpf(cpf);
+        Double balanceReceiver = accountReceiver.getBalance()  + balanceTransfer;
+        this.statementService.setStatementAccount(ActionAccount.DEPOSIT, accountReceiver, balanceTransfer);
+    }
+
+    private void validateIfCanTransfer(Double balance, Double balanceTransfer) {
+        if(balance < balanceTransfer || (balance - balanceTransfer == 0))
+            throw new BadRequestException("Tranferência não permitida , saldo insuficiente ! ");
     }
 
     private void validateBalance(ActionAccount actionAccount, Double balance) {

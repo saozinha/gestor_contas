@@ -1,6 +1,5 @@
 package com.lourenco.gestor_contas.inputOutPut.statement;
 
-import com.lourenco.gestor_contas.dal.Account;
 import com.lourenco.gestor_contas.enums.ActionAccount;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,9 +16,15 @@ public class StatementOutput  {
 
     private String id;
 
-    private Account account;
+    private String agency;
 
-    private String namePerson;
+    private String numberAccount;
+
+    private Double balanceCurrent;
+
+    private String cpf;
+
+    private String name;
 
     private ActionAccount actionAccount;
 

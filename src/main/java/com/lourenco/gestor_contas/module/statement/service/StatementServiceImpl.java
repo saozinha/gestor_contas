@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 @AllArgsConstructor
@@ -19,14 +21,17 @@ public class StatementServiceImpl implements  StatementService {
     public Statement setStatementAccount(ActionAccount actionAccount, Account account, Double balance) {
         final var statement = new Statement();
         statement.setActionAccount(actionAccount);
-        statement.setAccount(account);
-        statement.setPerson(account.getPerson());
+        statement.setNumberAccount(account.getNumberAccount());
+        statement.setAgency(account.getAgency());
+        statement.setCpf(account.getPerson().getCpf());
+        statement.setName(account.getPerson().getName());
         statement.setBalance(balance);
+        statement.setBalanceCurrent(account.getBalance());
         return this.repository.save(statement);
     }
 
     @Override
-    public Statement findByAccount(Account account) { ;
-        return repository.findByAccount(account);
+    public List<Statement> findByNumberAccount(Account account) { ;
+        return repository.findByNumberAccount(account.getNumberAccount());
     }
 }

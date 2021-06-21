@@ -7,10 +7,15 @@ public class StatementMapper {
 
     public static StatementOutput toStatementOutput(Statement statement) {
         final var statementOutput = new StatementOutput();
+        statementOutput.setId(statement.getId());
         statementOutput.setActionAccount(statement.getActionAccount());
-        statementOutput.setNamePerson(statement.getPerson().getName());
-        statementOutput.setAccount(statement.getAccount());
+        statementOutput.setAgency(statement.getAgency());
+        statementOutput.setCpf(statement.getCpf());
+        statementOutput.setName(statement.getName());
+        statementOutput.setNumberAccount(statement.getNumberAccount());
         statementOutput.setBalance(statement.getBalance());
+        statementOutput.setCreatedAt(statement.getCreatedAt());
+        statementOutput.setBalanceCurrent(statement.getBalanceCurrent());
         return statementOutput;
     }
 }

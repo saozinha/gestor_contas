@@ -2,6 +2,7 @@ package com.lourenco.gestor_contas.module.account.controller;
 
 
 import com.lourenco.gestor_contas.inputOutPut.BalanceInput;
+import com.lourenco.gestor_contas.inputOutPut.TransFerInput;
 import com.lourenco.gestor_contas.inputOutPut.account.AccountInput;
 import com.lourenco.gestor_contas.inputOutPut.account.AccountOutput;
 import com.lourenco.gestor_contas.inputOutPut.statement.StatementOutput;
@@ -11,14 +12,16 @@ import com.lourenco.gestor_contas.module.statement.mapper.StatementMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 import javax.validation.Valid;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RestController
 @RequestMapping("/accounts")
 @Api(value = "Account API", consumes = "application/json charset=utf-8")
@@ -43,17 +46,26 @@ public class AccountController {
     }
 
     @PostMapping(path = "deposit/")
-    public ResponseEntity<AccountOutput> deposit(
+    public ResponseEntity<StatementOutput> deposit(
             @ApiParam(value = "Objeto necessario para depositar valor em uma conta", required = true)
             @Valid @RequestBody final BalanceInput balanceInput) throws Exception {
-        return ResponseEntity.ok(AccountMapper.toAccountOutput(this.accountService.deposit(balanceInput)));
+        return ResponseEntity.ok(StatementMapper.toStatementOutput(this.accountService.deposit(balanceInput)));
     }
 
     @GetMapping(path = "/statement/{cpf}")
     @ApiOperation(value = "Utilize para visualizaro extrato de uma conta", consumes = "application/json")
-    public ResponseEntity<StatementOutput> getStatementByCpf(@ApiParam(value = "CPF da pessoa", required = true)
+    public Flux<StatementOutput> getStatementByCpf(@ApiParam(value = "CPF da pessoa", required = true)
                                              @PathVariable("cpf") String cpf ) {
-        return ResponseEntity.ok(StatementMapper.toStatementOutput(this.accountService.findStatementByCpf(cpf)));
+        return Flux.fromStream(this.accountService.findStatementByCpf(cpf).stream())
+                .subscribeOn(Schedulers.boundedElastic())
+                .map(StatementMapper::toStatementOutput);
+    }
+
+    @GetMapping(path = "/transfer")
+    @ApiOperation(value = "Utilize para tranferir valor de uma conta para outra", consumes = "application/json")
+    public ResponseEntity<StatementOutput> transferToAnotherAccount(@ApiParam(value = "Conta da retirada ", required = true)
+                                                             @RequestBody TransFerInput transferInput) {
+        return ResponseEntity.ok(StatementMapper.toStatementOutput(this.accountService.transferToAnotherAccount(transferInput)));
     }
 }
 

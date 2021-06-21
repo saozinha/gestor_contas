@@ -13,21 +13,22 @@ public class BalanceInput implements Serializable {
 
     private static final long serialVersionUID = 62243115072916667L;
 
-    @ApiModelProperty(notes = "Agencia do pagador")
+    @ApiModelProperty(notes = "Nome da pessoa")
+    @NotNull(message = "O nome não pode ser nulo.")
+    private String name;
+
+    @ApiModelProperty(notes = "CPF da pessoa")
     @NotNull(message = "O CPF não pode ser nulo.")
-    private String  agencyOfPayer;
+    private String cpf;
 
-    @ApiModelProperty(notes = "Numero da conta do do pagador")
-    @NotNull(message = "O Numero da conta não pode ser nulo.")
-    private String  numberAccountOfPayer;
+    @ApiModelProperty(notes = "Número da agência")
+    @NotNull(message = "O número da agência não pode ser nulo.")
+    private String agency;
 
-    @ApiModelProperty(notes = "Nome do pagador")
-    @NotNull(message = "O Nome do pagador não pode ser nulo.")
-    private String nameOfPayer;
 
-    @ApiModelProperty(notes = "CPF do favorecido")
-    @NotNull(message = "O CPF do favorecido não pode ser nulo.")
-    private String cpfOfPayee;
+    @ApiModelProperty(notes = "Numero da conta")
+    @NotNull(message = "O número da conta não pode ser nulo.")
+    private String numberAccount;
 
     @ApiModelProperty(notes = "Valor para Depositar/Tranferir")
     @NotNull(message = "O valor não pode ser nulo.")

@@ -1,7 +1,7 @@
 package com.lourenco.gestor_contas.module.account.controller;
 
 
-import com.lourenco.gestor_contas.inputOutPut.BalanceInput;
+import com.lourenco.gestor_contas.inputOutPut.TransferInput;
 import com.lourenco.gestor_contas.inputOutPut.account.AccountInput;
 import com.lourenco.gestor_contas.inputOutPut.account.AccountOutput;
 import com.lourenco.gestor_contas.inputOutPut.statement.StatementOutput;
@@ -47,8 +47,8 @@ public class AccountController {
     @PostMapping(path = "deposit/")
     public ResponseEntity<StatementOutput> deposit(
             @ApiParam(value = "Objeto necessario para depositar valor em uma conta", required = true)
-            @Valid @RequestBody final BalanceInput balanceInput) throws Exception {
-        return ResponseEntity.ok(StatementMapper.toStatementOutput(this.accountService.deposit(balanceInput)));
+            @Valid @RequestBody final TransferInput transferInput) throws Exception {
+        return ResponseEntity.ok(StatementMapper.toStatementOutput(this.accountService.deposit(transferInput)));
     }
 
     @GetMapping(path = "/statement/{cpf}")
@@ -63,8 +63,8 @@ public class AccountController {
     @PostMapping(path = "/transfer")
     @ApiOperation(value = "Utilize para tranferir valor de uma conta para outra", consumes = "application/json")
     public ResponseEntity<StatementOutput> transferToAnotherAccount(@ApiParam(value = "Objeto para transferência de valor", required = true)
-                                                            @Valid @RequestBody BalanceInput balanceInput) {
-        return ResponseEntity.ok(StatementMapper.toStatementOutput(this.accountService.transferToAnotherAccount(balanceInput)));
+                                                            @Valid @RequestBody final TransferInput transferInput) {
+        return ResponseEntity.ok(StatementMapper.toStatementOutput(this.accountService.transferToAnotherAccount(transferInput)));
     }
 }
 

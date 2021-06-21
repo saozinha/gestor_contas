@@ -8,14 +8,8 @@ public class StatementMapper {
     public static StatementOutput toStatementOutput(Statement statement) {
         final var statementOutput = new StatementOutput();
         statementOutput.setId(statement.getId());
-        statementOutput.setActionAccount(statement.getActionAccount());
-        statementOutput.setAgency(statement.getAgency());
-        statementOutput.setCpf(statement.getCpfOfPayer());
-        statementOutput.setName(statement.getNameOfPayer());
-        statementOutput.setNumberAccount(statement.getNumberAccount());
-        statementOutput.setBalance(statement.getBalance());
-        statementOutput.setCreatedAt(statement.getCreatedAt());
-        statementOutput.setBalanceCurrent(statement.getBalanceCurrent());
+        statementOutput.setTransferInput(statement.getTransferInput());
+        statementOutput.setDtRegister(statement.getDtRegister());
         return statementOutput;
     }
 }

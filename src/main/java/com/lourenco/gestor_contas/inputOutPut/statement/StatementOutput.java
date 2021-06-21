@@ -1,6 +1,6 @@
 package com.lourenco.gestor_contas.inputOutPut.statement;
 
-import com.lourenco.gestor_contas.enums.ActionAccount;
+import com.lourenco.gestor_contas.inputOutPut.TransferInput;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,22 +16,7 @@ public class StatementOutput  {
 
     private String id;
 
-    private String agency;
+    private TransferInput transferInput;
 
-    private String numberAccount;
-
-    private Double balanceCurrent;
-
-    private String cpf;
-
-    private String name;
-
-    private ActionAccount actionAccount;
-
-    private Double balance;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
+    private LocalDateTime dtRegister = LocalDateTime.now();
 }

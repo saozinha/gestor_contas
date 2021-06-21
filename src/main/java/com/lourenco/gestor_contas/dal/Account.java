@@ -1,10 +1,7 @@
 package com.lourenco.gestor_contas.dal;
 
 import com.lourenco.gestor_contas.enums.TypeAccount;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -17,6 +14,7 @@ import javax.persistence.Enumerated;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "conta")
+@Builder
 public class Account extends BaseEntity {
 
     @Id

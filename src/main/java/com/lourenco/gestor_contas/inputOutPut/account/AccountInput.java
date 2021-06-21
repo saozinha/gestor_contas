@@ -32,6 +32,5 @@ public class AccountInput implements Serializable {
 
     @ApiModelProperty(notes = "Saldo da conta", required = true)
     @NotNull(message = "O Saldo não pode ser nulo.")
-//    @Positive(message = "O Saldo não pode ser negativo.")
     private Double balance;
 }

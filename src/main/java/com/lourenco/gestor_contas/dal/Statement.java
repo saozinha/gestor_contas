@@ -1,16 +1,15 @@
 package com.lourenco.gestor_contas.dal;
 
-import com.lourenco.gestor_contas.enums.ActionAccount;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.lourenco.gestor_contas.inputOutPut.TransferInput;
+import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Data
+@Builder
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,24 +19,9 @@ public class Statement  extends BaseEntity  {
     @Id
     private String id;
 
-    @Field("agency")
-    private String agency;
+   @Field("accountDepositTransfer")
+    private TransferInput transferInput;
 
-    @Field("numberAccount")
-    private String numberAccount;
+    private LocalDateTime dtRegister = LocalDateTime.now();
 
-    @Field("balanceCurrent")
-    private Double balanceCurrent;
-
-    @Field("cpf")
-    private String cpfOfPayer;
-
-    @Field("name")
-    private String nameOfPayer;
-
-    @Field("actionAccount")
-    private ActionAccount actionAccount;
-
-    @Field("balance")
-    private Double balance;
 }

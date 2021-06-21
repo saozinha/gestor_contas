@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 @Data
 @ApiModel(value = "transfer", description = "Dados necessários para transferir valores")
-public class TransFerInput {
+public class TransferInput {
+
     private String numberAccount;
-    private String CpfPersonReceiver;
-    private Double balance;
+    BalanceInput balanceInput;
     LocalDateTime dtRegister = LocalDateTime.now();
 }

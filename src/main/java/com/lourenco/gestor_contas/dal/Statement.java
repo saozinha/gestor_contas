@@ -30,10 +30,10 @@ public class Statement  extends BaseEntity  {
     private Double balanceCurrent;
 
     @Field("cpf")
-    private String cpf;
+    private String cpfOfPayer;
 
     @Field("name")
-    private String name;
+    private String nameOfPayer;
 
     @Field("actionAccount")
     private ActionAccount actionAccount;

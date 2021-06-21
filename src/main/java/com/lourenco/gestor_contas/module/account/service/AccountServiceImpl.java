@@ -5,7 +5,6 @@ import com.lourenco.gestor_contas.dal.Statement;
 import com.lourenco.gestor_contas.enums.ActionAccount;
 import com.lourenco.gestor_contas.inputOutPut.BalanceInput;
 import com.lourenco.gestor_contas.inputOutPut.account.AccountInput;
-import com.lourenco.gestor_contas.inputOutPut.TransFerInput;
 import com.lourenco.gestor_contas.module.account.mapper.AccountMapper;
 import com.lourenco.gestor_contas.module.account.repository.AccountRepository;
 import com.lourenco.gestor_contas.module.person.service.PersonService;
@@ -38,8 +37,15 @@ public class AccountServiceImpl implements AccountService {
             throw new ConflictException("Já existe uma conta cadastrada para o CPF "+ account.getPerson().getCpf());
         });
         final var account = AccountMapper.to(accountInput, person);
+        validateBalance(ActionAccount.CREATE , account.getBalance());
         this.repository.save(account);
-        this.statementService.setStatementAccount(ActionAccount.DEPOSIT, account, account.getBalance());
+        final var balanceInput = new BalanceInput();
+        balanceInput.setCpfOfPayee(account.getPerson().getCpf());
+        balanceInput.setNameOfPayer(account.getPerson().getName());
+        balanceInput.setNumberAccountOfPayer(account.getNumberAccount());
+        balanceInput.setAgencyOfPayer(account.getAgency());
+        balanceInput.setBalance(account.getBalance());
+        this.registerStatement(ActionAccount.DEPOSIT, balanceInput , account.getBalance());
         return account;
     }
 
@@ -56,14 +62,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Statement deposit(BalanceInput balanceInput) {
-        final var account = this.findAccountByCpf(balanceInput.getCpf());
-        final var statement = new Statement();
-        statement.setActionAccount(ActionAccount.DEPOSIT);
+        final var account = this.findAccountByCpf(balanceInput.getCpfOfPayee());
         validateBalance(ActionAccount.DEPOSIT , balanceInput.getBalance());
         Double newBalance = account.getBalance() + balanceInput.getBalance();
         account.setBalance(newBalance);
         this.repository.save(account);
-        return this.statementService.setStatementAccount(ActionAccount.DEPOSIT, account, balanceInput.getBalance());
+        return this.registerStatement(ActionAccount.DEPOSIT, balanceInput , account.getBalance());
     }
 
     @Override
@@ -78,26 +82,37 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Statement transferToAnotherAccount(TransFerInput transferInput) {
-        // buscar as conta do titular
-        final var accountTitular = this.findByNumberAccount(transferInput.getNumberAccount());
+    public Statement transferToAnotherAccount(BalanceInput balanceInput) {
+        final var accountOfPayer = this.findByNumberAccount(balanceInput.getNumberAccountOfPayer());
         // validar o saldo do titular
-        this.validateIfCanTransfer(accountTitular.getBalance() , transferInput.getBalance() );
+        this.validateIfCanTransfer(accountOfPayer.getBalance() , balanceInput.getBalance() );
         // subtrair o valor da conta do titular
-        Double balanceTitular = accountTitular.getBalance()  - transferInput.getBalance();
-        accountTitular.setBalance(balanceTitular);
+        Double balanceCurrent = accountOfPayer.getBalance() - balanceInput.getBalance();
+        accountOfPayer.setBalance(balanceCurrent);
+        this.repository.save(accountOfPayer);
+        // Envia a tranferencia para o favorecido
+        this.sendTransferToPayee(balanceInput.getCpfOfPayee(), balanceInput);
         // registrar o extrato da conta do titular
-        final var statementTitular = this.statementService.setStatementAccount(ActionAccount.TRANSFER, accountTitular, transferInput.getBalance());
-        this.sendTransferToAccount(transferInput.getCpfPersonReceiver(), transferInput.getBalance());
-        return statementTitular;
+        return this.registerStatement(ActionAccount.TRANSFER, balanceInput, accountOfPayer.getBalance() );
+//        final var statementTitular = this.statementService.setStatementAccount(ActionAccount.TRANSFER, balanceInput, accountOfPayer.getBalance());
+
     }
 
-    private void sendTransferToAccount(String cpf, Double balanceTransfer) {
+    private void sendTransferToPayee(String cpf, BalanceInput balanceInput) {
         // buscar as conta do favorecido
         final var accountReceiver = this.findAccountByCpf(cpf);
-        Double balanceReceiver = accountReceiver.getBalance()  + balanceTransfer;
-        this.statementService.setStatementAccount(ActionAccount.DEPOSIT, accountReceiver, balanceTransfer);
+        Double balanceReceiver = accountReceiver.getBalance()  + balanceInput.getBalance();
+        accountReceiver.setBalance(balanceReceiver);
+        this.repository.save(accountReceiver);
+//        final var statementTitular = this.statementService.setStatementAccount(ActionAccount.TRANSFER, balanceInput, accountReceiver.getBalance());
+        this.registerStatement( ActionAccount.TRANSFER, balanceInput, accountReceiver.getBalance() );
     }
+
+
+    private Statement registerStatement(ActionAccount actionAccount , BalanceInput balanceInput,  Double balance) {
+        return this.statementService.setStatementAccount(actionAccount, balanceInput , balance);
+    }
+
 
     private void validateIfCanTransfer(Double balance, Double balanceTransfer) {
         if(balance < balanceTransfer || (balance - balanceTransfer == 0))
@@ -105,7 +120,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private void validateBalance(ActionAccount actionAccount, Double balance) {
-        if(balance <= 0) throw new NotBalanceAcceptableException("Saldo inválido, informe um valor acima de 0 ");
+        if(actionAccount == ActionAccount.CREATE && (balance <= 0))
+            throw new NotBalanceAcceptableException("Saldo inválido, informe um valor acima de 0 ");
         if (actionAccount == ActionAccount.DEPOSIT && balance > 2000L)
              throw new NotBalanceAcceptableException("Valor inválido! Depositos devem ser abaixo de 2000 ! ");
     }

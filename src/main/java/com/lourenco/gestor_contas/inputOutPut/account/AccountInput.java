@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import java.io.Serializable;
 
 @Data
@@ -33,6 +32,6 @@ public class AccountInput implements Serializable {
 
     @ApiModelProperty(notes = "Saldo da conta", required = true)
     @NotNull(message = "O Saldo não pode ser nulo.")
-    @Positive(message = "O Saldo não pode ser negativo.")
+//    @Positive(message = "O Saldo não pode ser negativo.")
     private Double balance;
 }

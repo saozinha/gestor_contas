@@ -10,8 +10,8 @@ public class StatementMapper {
         statementOutput.setId(statement.getId());
         statementOutput.setActionAccount(statement.getActionAccount());
         statementOutput.setAgency(statement.getAgency());
-        statementOutput.setCpf(statement.getCpf());
-        statementOutput.setName(statement.getName());
+        statementOutput.setCpf(statement.getCpfOfPayer());
+        statementOutput.setName(statement.getNameOfPayer());
         statementOutput.setNumberAccount(statement.getNumberAccount());
         statementOutput.setBalance(statement.getBalance());
         statementOutput.setCreatedAt(statement.getCreatedAt());

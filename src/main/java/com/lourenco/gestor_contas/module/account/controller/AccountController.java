@@ -2,7 +2,6 @@ package com.lourenco.gestor_contas.module.account.controller;
 
 
 import com.lourenco.gestor_contas.inputOutPut.BalanceInput;
-import com.lourenco.gestor_contas.inputOutPut.TransFerInput;
 import com.lourenco.gestor_contas.inputOutPut.account.AccountInput;
 import com.lourenco.gestor_contas.inputOutPut.account.AccountOutput;
 import com.lourenco.gestor_contas.inputOutPut.statement.StatementOutput;
@@ -61,11 +60,11 @@ public class AccountController {
                 .map(StatementMapper::toStatementOutput);
     }
 
-    @GetMapping(path = "/transfer")
+    @PostMapping(path = "/transfer")
     @ApiOperation(value = "Utilize para tranferir valor de uma conta para outra", consumes = "application/json")
-    public ResponseEntity<StatementOutput> transferToAnotherAccount(@ApiParam(value = "Conta da retirada ", required = true)
-                                                             @RequestBody TransFerInput transferInput) {
-        return ResponseEntity.ok(StatementMapper.toStatementOutput(this.accountService.transferToAnotherAccount(transferInput)));
+    public ResponseEntity<StatementOutput> transferToAnotherAccount(@ApiParam(value = "Objeto para transferência de valor", required = true)
+                                                            @Valid @RequestBody BalanceInput balanceInput) {
+        return ResponseEntity.ok(StatementMapper.toStatementOutput(this.accountService.transferToAnotherAccount(balanceInput)));
     }
 }
 

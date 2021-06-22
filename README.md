@@ -8,7 +8,9 @@
 - DOCKER
 - SWAGGER
  
-### PASSOS PARA EXECUTAR ( Docker instalado ) : 
+### PASSOS PARA EXECUTAR :   
+ 
+  Para o 1 passo, instale o [Docker] (https://balta.io/blog/docker-instalacao-configuracao-e-primeiros-passos) ) : 
 
 SE VOCÊ FEZ O CLONE OU BAIXOU O PROJETO
 
@@ -22,34 +24,33 @@ http://localhost:8080/swagger-ui.html
 
 ### ORGANIZAÇÃO DO PROJETO :
 
-├── pom.xml
-├── src
-│   ├── main
-│   │   ├── java
-│   │   │   └── com
-│   │   │       └── lourenco
-│   │   │           └── gestor_contas
-│   │   │               ├── GestorContasApplication.java
-│   │   │               ├── config
-│   │   │               ├── dal
-│   │   │               ├── enums
-│   │   │               ├── inpuOutpu
-│   │   │               ├── module 
-│   │   │               │   └── Account
-│   │   │               │         └── controller    
-│   │   │               │         └── mapper
-│   │   │               │         └── repository
-│   │   │               │         └── service
-│   │   │               ├── tools
-│   └── test
-│       └── java
-│           └── com
-│               └── lourenco
-│                   └── gestor_contas
-│                       └── conta
-│                           ├── faker
-│                           └── AccountControllerTest.java
-│                       └── person
-│                           ├── faker
-│                           └── PersonControllerTest.java
-│                           └── PersonServiceTest.java
+├── pom.xml <br />
+├── src <br />
+│   ├── main <br />
+│   │   ├── java <br />
+│   │   │   └── com <br />
+│   │   │       └── lourenco <br />
+│   │   │           └── gestor_contas <br />
+│   │   │               ├── GestorContasApplication.java <br />
+│   │   │               ├── config <br />
+│   │   │               ├── dal <br />
+│   │   │               ├── enums <br />
+│   │   │               ├── inpuOutput <br />
+│   │   │               ├── module  <br />
+│   │   │               │   └── Account <br />
+│   │   │               │         └── controller     <br />
+│   │   │               │         └── mapper <br />
+│   │   │               │         └── repository <br />
+│   │   │               │         └── service  <br />
+│   │   │               ├── tools <br />
+│   └── test <br />
+│       └── java <br />
+│           └── com <br />
+│               └── lourenco <br />
+│                   └── gestor_contas <br />
+│                       └── conta <br />
+│                           ├── faker <br />
+│                           └── AccountServiceTest.java <br />
+│                       └── person <br />
+│                           ├── faker <br /> 
+│                           └── PersonServiceTest.java <br />

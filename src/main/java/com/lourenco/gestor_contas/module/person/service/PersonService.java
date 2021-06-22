@@ -13,6 +13,4 @@ public interface PersonService {
     Person findByCpf(String cpf);
 
     List<Person> getAll();
-
-    Person  findByid(String idPerson);
 }

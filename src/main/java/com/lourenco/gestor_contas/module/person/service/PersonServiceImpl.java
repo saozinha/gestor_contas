@@ -40,12 +40,6 @@ public class PersonServiceImpl implements PersonService {
         return listAllPerson;
     }
 
-    @Override
-    public Person findByid(String idPerson) {
-        return this.repository.findByid(idPerson).orElseThrow(() -> new NotFoundException("Não foi encontrado um registro para o ID " + idPerson));
-    }
-
-
     private void validateCpfAlreadyExists(String cpf) throws Exception {
         Optional<Person> person = this.repository.findByCpf(cpf);
         if (person.isPresent()) {

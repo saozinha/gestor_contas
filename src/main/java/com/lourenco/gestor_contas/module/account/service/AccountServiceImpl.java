@@ -14,7 +14,7 @@ import com.lourenco.gestor_contas.tools.exceptions.BadRequestException;
 import com.lourenco.gestor_contas.tools.exceptions.ConflictException;
 import com.lourenco.gestor_contas.tools.exceptions.NotBalanceAcceptableException;
 import com.lourenco.gestor_contas.tools.exceptions.NotFoundException;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +22,22 @@ import java.util.List;
 
 @Service
 @Transactional
-@AllArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
+    @Autowired
     private PersonService personService;
 
+    @Autowired
     private StatementService statementService;
 
+    @Autowired
     private AccountRepository repository;
+
+    public AccountServiceImpl(PersonService personService, StatementService statementService, AccountRepository repository) {
+        this.personService = personService;
+        this.statementService = statementService;
+        this.repository = repository;
+    }
 
     @Override
     public Account create(AccountInput accountInput) {

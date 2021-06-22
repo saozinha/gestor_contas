@@ -8,7 +8,7 @@ import com.lourenco.gestor_contas.module.person.service.PersonService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +17,17 @@ import reactor.core.scheduler.Schedulers;
 
 import javax.validation.Valid;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/persons")
 @Api(value = "Person API", consumes = "application/json charset=utf-8")
 public class PersonController {
 
-    private final PersonService personService;
+    @Autowired
+    private PersonService personService;
+
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
